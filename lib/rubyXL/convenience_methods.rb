@@ -21,6 +21,18 @@ module RubyXL
           name = SHEET_NAME_TEMPLATE % (n += 1)
         end until self[name].nil?
       end
+      
+    # Remove the worksheet with the supplied name
+    #
+    # @param [String] The name for the worksheet to be deleted
+    #
+    # There may be formula/references/links to the deleted sheet, which will be reported when opening the resulting file
+    def remove_worksheet(name = nil)
+      unless name.nil?
+        worksheets.delete_if{|ws| ws.sheet_name == name}
+        defined_names.delete_if{|dn| dn.reference =~ Regexp.new("^#{name}!")}
+      end
+    end
 
       new_worksheet = Worksheet.new(:workbook => self, :sheet_name => name)
       worksheets << new_worksheet
