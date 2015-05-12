@@ -22,6 +22,11 @@ module RubyXL
         end until self[name].nil?
       end
       
+      new_worksheet = Worksheet.new(:workbook => self, :sheet_name => name)
+      worksheets << new_worksheet
+      new_worksheet
+    end
+
     # Remove the worksheet with the supplied name
     #
     # @param [String] The name for the worksheet to be deleted
@@ -32,11 +37,6 @@ module RubyXL
         worksheets.delete_if{|ws| ws.sheet_name == name}
         defined_names.delete_if{|dn| dn.reference =~ Regexp.new("^#{name}!")}
       end
-    end
-
-      new_worksheet = Worksheet.new(:workbook => self, :sheet_name => name)
-      worksheets << new_worksheet
-      new_worksheet
     end
 
     def each
